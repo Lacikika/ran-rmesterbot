@@ -36,7 +36,7 @@ function log(kind, message, username,) {
     console.log(`[ ${timestamp} ][ ${kind} ] ${username} ${message}`);
 } 
 
-log('INFO', 'test', 'test')
+
 // Get user activity
 function getUserActivity(userId, callback) {
     const query = `SELECT message_count FROM user_activity WHERE user_id = ?`;

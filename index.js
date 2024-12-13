@@ -14,6 +14,11 @@ const client = new Client({
         IntentsBitField.Flags.MessageContent,
     ],
 });
+// becous im shitty
+function loging(kind, message, username,) {
+    const timestamp = new Date().toISOString();
+    console.log(`[ ${timestamp} ][ ${kind} ] ${username} | ${message}`);
+} 
 
 
 client.commands = new Collection();
@@ -106,7 +111,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 });
 
-
+loging('INFO', 'Bot is ready!',);
 
 client.on('messageCreate', (message) => {
     // Ignore messages from bots
