@@ -90,6 +90,7 @@ client.on('interactionCreate', async (interaction) => {
                 console.log(`Modal submit interaction handled for custom ID: ${interaction.customId} by ${interaction.user.tag}`);
             } else {
                 console.warn(`Modal handler not found for ID: ${interaction.customId}`);
+                log('INFO', `Modal handler not found for ID: ${interaction.customId}`, interaction.user.tag);
             }
         }
         

@@ -3,10 +3,10 @@ require('dotenv').config();
 
 // Create a connection to the database
 const connection = mysql.createConnection({
-    host: process.env.MYSQL_HOST || 'localhost',
-    user: process.env.MYSQL_USER || 'discord',
-    password: process.env.MYSQL_PASSWORD || 'O5S29k46Tja2+',
-    database: process.env.MYSQL_DATABASE || 'discord_bot',
+    host: process.env.MYSQL_HOST ,
+    user: process.env.MYSQL_USER ,
+    password: process.env.MYSQL_PASSWORD ,
+    database: process.env.MYSQL_DATABASE ,
 });
 
 // Connect to the database
