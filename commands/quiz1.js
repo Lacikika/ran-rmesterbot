@@ -1,3 +1,4 @@
+/*
 module.exports = {
     data: {
         name: 'quiz1',
@@ -9,3 +10,4 @@ module.exports = {
         user.send("Elindítottad a Jelentkezésed")
     },
 };
+*/

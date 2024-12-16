@@ -73,9 +73,9 @@ client.on('interactionCreate', async (interaction) => {
             const command = client.commands.get(interaction.commandName);
             if (command) {
                 await command.execute(interaction);
-                console.log(`Executed command: ${interaction.commandName} by ${interaction.user.tag}`);
+                loging('I', `Executed command: ${interaction.commandName} by ${interaction.user.tag}`, interaction.user.tag);
             } else {
-                console.warn(`Command not found: ${interaction.commandName}`);
+                loging('W', `Command not found: ${interaction.commandName}`, interaction.user.tag);
             }
         }
         
@@ -87,9 +87,9 @@ client.on('interactionCreate', async (interaction) => {
             const command = client.commands.get(interaction.message.interaction?.commandName || ''); // Optional chaining to support custom buttons
             if (command && command.handleButton) {
                 await command.handleButton(interaction);
-                console.log(`Button interaction handled for command: ${interaction.message.interaction?.commandName || ''} by ${interaction.user.tag}`);
+                loging('I', `Button interaction handled for command: ${interaction.message.interaction?.commandName || ''} by ${interaction.user.tag}`, interaction.user.tag);
             } else {
-                console.warn(`Button interaction handler not found.`);
+                loging('W', `Button interaction handler not found.`, interaction.user.tag);
             }
         }
         
@@ -98,9 +98,9 @@ client.on('interactionCreate', async (interaction) => {
             const command = client.commands.get(interaction.message.interaction?.commandName || '');
             if (command && command.handleSelectMenu) {
                 await command.handleSelectMenu(interaction);
-                console.log(`Select menu interaction handled for command: ${interaction.message.interaction?.commandName || ''} by ${interaction.user.tag}`);
+                loging('I', `Select menu interaction handled for command: ${interaction.message.interaction?.commandName || ''} by ${interaction.user.tag}`, interaction.user.tag);
             } else {
-                console.warn(`Select menu handler not found.`);
+                loging('W', `Select menu handler not found.`, interaction.user.tag);
             }
         }
         
@@ -109,19 +109,18 @@ client.on('interactionCreate', async (interaction) => {
             const command = client.commands.get(interaction.customId);
             if (command && command.handleModal) {
                 await command.handleModal(interaction);
-                console.log(`Modal submit interaction handled for custom ID: ${interaction.customId} by ${interaction.user.tag}`);
+                loging('I', `Modal submit interaction handled for custom ID: ${interaction.customId} by ${interaction.user.tag}`, interaction.user.tag);
             } else {
-                console.warn(`Modal handler not found for ID: ${interaction.customId}`);
-                log('INFO', `Modal handler not found for ID: ${interaction.customId}`, interaction.user.tag);
+                loging('I', `Modal handler not found for ID: ${interaction.customId}`, interaction.user.tag);
             }
         }
         
         // Other types of interactions can be handled here if needed
         else {
-            console.warn(`Unhandled interaction type: ${interaction.type}`);
+            loging('W', `Unhandled interaction type: ${interaction.type}`, interaction.user.tag);
         }
     } catch (error) {
-        console.error(`Error handling interaction: ${error}`);
+        loging('E', `Error handling interaction: ${error}`, interaction.user.tag);
         if (interaction.isRepliable()) {
             await interaction.reply({ content: 'There was an error processing this interaction!', ephemeral: true });
         }
@@ -161,13 +160,37 @@ client.on('guildMemberUpdate', async (oldMember, newMember) => {
 
     if (notificationMessage) {
         try {
-            await user.send(`Szia  @${user.username},\n${notificationMessage}`);
+            await user.send(`Szia  @${user.tag},\n${notificationMessage}`);
         } catch (error) {
             loging('E', `Failed to send message to ${user.tag}: ${error}`, user.tag);
         }
     }
 });
 
+client.once('ready', () => {
+
+
+    // Lehetséges állapotok listája
+    const activities = [
+        { name: '/help | Segítség a parancsokhoz', type: 'LISTENING' },
+        { name: 'a szervereket!', type: 'WATCHING' },
+        { name: 'üzeneteket!', type: 'LISTENING' },
+        { name: 'Fejlesztés alatt 🤖', type: 'PLAYING' },
+    ];
+
+    let currentIndex = 0;
+
+    // Presence frissítése időzítővel
+    setInterval(() => {
+        const activity = activities[currentIndex]; // Válassza ki az aktuális állapotot
+        client.user.setPresence({
+            activities: [{ name: activity.name, type: activity.type }],
+            status: 'online', // Állapot: online, idle, dnd (Ne zavarj)
+        });
+        loging('I', `Presence updated: ${activity.name}`, client.user.tag);
+        currentIndex = (currentIndex + 1) % activities.length; // Váltson a következő állapotra
+    }, 60000); // Frissítés 15 másodpercenként
+});
 
 
 // Log loaded commands
