@@ -189,7 +189,7 @@ client.once('ready', () => {
         });
         loging('I', `Presence updated: ${activity.name}`, client.user.tag);
         currentIndex = (currentIndex + 1) % activities.length; // Váltson a következő állapotra
-    }, 60000); // Frissítés 15 másodpercenként
+    }, 900000); // Frissítés 15 másodpercenként
 });
 
 
