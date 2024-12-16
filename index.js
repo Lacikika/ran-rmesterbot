@@ -14,11 +14,27 @@ const client = new Client({
         IntentsBitField.Flags.MessageContent,
     ],
 });
+
+
 // becous im shitty
 function loging(kind, message, username,) {
     const timestamp = new Date().toISOString();
-    console.log(`[ ${timestamp} ][ ${kind} ] ${username} | ${message}`);
+
+    if (kind === 'W') {
+        console.warn(`[ ${timestamp} ][ WARNING ] ${username} | ${message}`);
+
+    } else if (kind === 'E') {
+        console.error(`[ ${timestamp} ][ ERROR ] ${username} | ${message}`);
+
+    } else if (kind === 'I') {
+        console.log(`[ ${timestamp} ][ INFO ] ${username} | ${message}`);
+    }    
+    else    {
+        console.log(`[ ${timestamp} ][ ${kind} ] ${username} | ${message}`);
+    }
 } 
+
+loging('W', 'test1', 'test2');
 
 
 client.commands = new Collection();
@@ -39,7 +55,7 @@ function logMessage(message) {
     const timestamp = new Date().toISOString();
     fs.appendFileSync(logFilePath, `[${timestamp}] ${message}\n`, 'utf8');
 }
-
+/*
 let i = 1;
 while (i <= 100) {
   console.log(`${i}%`);
@@ -47,7 +63,7 @@ while (i <= 100) {
   setTimeout(() => {}, 1000); // wait 100ms before next iteration
 }
 
-
+*/
 
 client.on('interactionCreate', async (interaction) => {
     try {
@@ -111,7 +127,6 @@ client.on('interactionCreate', async (interaction) => {
     }
 });
 
-loging('INFO', 'Bot is ready!',);
 
 client.on('messageCreate', (message) => {
     // Ignore messages from bots
