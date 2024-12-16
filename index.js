@@ -1,19 +1,20 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const { Client, IntentsBitField, Collection } = require('discord.js');
 const { incrementUserActivity } = require('./database.js');
 const { log } = require('console');
-
-
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
 
 const client = new Client({
     intents: [
-        IntentsBitField.Flags.Guilds,
-        IntentsBitField.Flags.GuildMessages,
-        IntentsBitField.Flags.MessageContent,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
     ],
+    partials: ['USER', 'GUILD_MEMBER', 'CHANNEL'],
 });
+
 
 
 // becous im shitty
@@ -149,18 +150,20 @@ client.on('guildMemberUpdate', async (oldMember, newMember) => {
 
     if (rolesAdded.size > 0) {
         const addedRolesNames = rolesAdded.map(role => role.name).join(', ');
-        notificationMessage += `🔹 New roles added: ${addedRolesNames}\n`;
+        notificationMessage += `🔹 Uj rangok hozzáadva: ${addedRolesNames}\n`;
+        loging('I', `New roles added: ${addedRolesNames}`, user.tag);
     }
     if (rolesRemoved.size > 0) {
         const removedRolesNames = rolesRemoved.map(role => role.name).join(', ');
-        notificationMessage += `🔻 Roles removed: ${removedRolesNames}\n`;
+        notificationMessage += `🔻 Rang levéve: ${removedRolesNames}\n`;
+        loging('I', `Roles removed: ${removedRolesNames}`, user.tag);
     }
 
     if (notificationMessage) {
         try {
-            await user.send(`Hello ${user.username},\n${notificationMessage}`);
+            await user.send(`Szia  @${user.username},\n${notificationMessage}`);
         } catch (error) {
-            console.error(`Failed to send message to ${user.tag}:`, error);
+            loging('E', `Failed to send message to ${user.tag}: ${error}`, user.tag);
         }
     }
 });
